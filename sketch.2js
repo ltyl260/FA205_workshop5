@@ -1,0 +1,172 @@
+// # include duck class
+/* visualise self-data set from .csv file*/
+// first step: open the file! https://p5js.org/reference/p5/loadTable/
+let table;
+
+function preload() {
+  // csv is formatted with comas seperaing each column and a header specifying the column labels
+  table = loadTable('/SleepData.csv','csv');
+}
+// next step: use the table! https://p5js.org/reference/p5/p5.Table/
+function setup() {
+  createCanvas(800,1100);
+  background(200,200,200);
+  tic = -1; // initialise 'tic' to track the iterations of the sketch
+  click = -1; //initialise 'click' to track the mouse clicks
+  //count the columns
+  rowN = table.getRowCount();
+  colN = table.getColumnCount();
+  spacingN = 20
+  // let duck1 = new Duck(20,20,50);
+  AsleepDuck = new Duck(100,100,50);
+  AsleepDuck.show();
+  AwakeDuck = new Duck(random(width),random(height),random(100),232, 235, 52,'awake');
+  ImbetweenDuck = new Duck(random(width),random(height),random(100),0,0,0,'d');
+  // want to calculate spacing fromcsv so width/rows for x, etc.
+  spacingX = (width - 2*spacingN) / rowN; 
+  spacingY = (height - 2*spacingN) / colN; 
+  
+  // // #############################################################################################  cycle through the table and display
+  // for (let r = 0; r < table.getRowCount(); r++) {
+  //   for (let c = 0; c < table.getColumnCount(); c++) {
+  //     // text((table.getString(r, c)),c*80+20,r*70+100,200);
+  //     if ((r == 0)&&(c > 0)) { // column header i.e. time of day
+  //       text((table.getString(r, c)),r*70+spacingN,(height-spacingN-11)-c*spacingY,spacingN);
+  //       // duck1 = new Duck(r*70+spacingN,(height-spacingN-11)-c*spacingY,50);
+  //     } else if ((r >= 1)&&(c == 0)){ // row header i.e. day of teh week 
+  //       // duck1 = new Duck(r*70+spacingN,(height-spacingN)-c*spacingY,50);
+  //       text((table.getString(r, c)),r*spacingX,(height-spacingN)-c*spacingY,spacingN);
+  //     } else {
+  //       // duck1 = new Duck(r*spacingX+spacingN,(height-spacingN)-c*spacingY,50);
+  //       text((table.getString(r, c)+'%'),r*spacingX+spacingN,(height-spacingN)-c*spacingY,spacingN);
+  //     }
+  //     // duck1.show(); 
+  //   }
+  // }
+  // text(str('Percentage of Sleep Had Hourly per Day'),(width-250)/2,spacingN,250);
+  // describe(`chart of percentage of sleep had per hour per day for a week in November"`);
+  // // #############################################################################################  end table display by cycling
+
+  // take table info and store in array
+
+  // #############################################################################################  record table data to 'data' array
+  data = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Friday
+          [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Saturday
+          [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Sunday
+          [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Monday
+          [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Tuesday
+          [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Wednesday
+          [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]; // Thursday
+
+  for (let r = 1; r < table.getRowCount(); r++) {
+    for (let c = 1; c < table.getColumnCount(); c++) {
+      // text((table.getString(r, c)),c*80+20,r*70+100,200);
+      if ((r != 0)&&(c!=0)) {
+        data[r-1][c-1] = table.getString(r, c);
+      }
+    }
+  }
+  // // // display stored info as is stored in data array
+  // text('Friday ' + data[0], 50,130);
+  // text('Saturday ' + data[1], 50,150);
+  // text('Sunday ' + data[2], 50,170);
+  // text('Monday ' + data[3], 50,190);
+  // text('Tuesday ' + data[4], 50,210);
+  // text('Wednesday ' + data[5], 50,230);
+  // text('Thursday ' + data[6], 50,250);
+  // text(str('Percentage of Sleep Had Hourly per Day'),120,4*spacingN);
+  // describe(`chart of percentage of sleep had per hour per day for a week in November"`);
+  // #############################################################################################  end table display by cycling
+
+}
+
+class Duck {
+  constructor(x,y,size){
+    // duck pos x and y
+    this.x = y;
+    this.y = x;
+    // duck movement gradient
+    this.t = random(10);
+    this.u = random(10);
+    // ducks rgb colour variables
+    this.r = 255;
+    this.g = 255;
+    this.b = 0;
+    this.l = size;// unit length to standardise the size of the ducks
+    this.grows = 1; //operator to control zoom fucntion
+    this.z = random(width/6); //zoom variable for duck zoom rate
+    this.d = d
+  }
+  show(){
+    // body
+    stroke(this.r,this.g,this.b);
+    fill(this.r,this.g,this.b);
+    circle(this.x,this.y,this.l);
+    circle(this.x+(4.5*this.l/5),this.y+(4*this.l/5),this.l);
+    ellipse(this.x+(2*this.l/5),this.y+this.l,this.l*2,this.l+(this.l/5));
+    //bill
+    stroke(this.g, this.b, abs(this.r+100));
+    fill(this.g, this.b, abs(this.r+100));
+    ellipse(this.x-(2*this.l/5),this.y,(3*this.l/5),this.l/5);
+    ellipse(this.x-(1.5*this.l/5),this.y-(this.l/10),(1.5*this.l/5),this.l/10);
+    // duck eyes
+      //eye white
+    stroke(0,0,0);
+    fill(0,0,0);
+    circle(this.x+(this.l/5),this.y-(this.l/10),(1.1*this.l/5));
+      // eye black
+    stroke(255,255,255);
+    fill(255,255,255);
+    circle(this.x+(1.2*this.l/5),this.y-(1*this.l/5),this.l/10);
+    // data
+    stroke(255,255,255,2)
+    fill(0,0,0);
+    text(str(this.d),this.x-(this.l/4),this.y+this.l*1.3)
+  }
+  move(){
+    // movement conditions duck 1
+    this.x += this.t;
+    if (this.x > width || this.x < 0){
+      this.t = this.t * -1;
+    }
+    this.y += this.u;
+    if ((this.y > height || this.y < 0)){ 
+      this.u = this.u * -1;
+    }
+   }
+  colour(r,g,b){  // changed to set colour
+    this.r = r;
+    this.g = g;
+    this.b = b;
+  }
+  new(x,y,d){ // changed to update x,y,d AND show duck
+    this.x = x;
+    this.y = y;
+    this.d = d;
+    this.show();
+  }
+}
+
+// mouse pressed to reveal data?
+function mousePressed(){
+}
+
+
+
+function draw(){  
+// AsleepDuck.new(50,50,60);
+// tic += 1; //tic starts at 0;
+// //text(str(data.length),50,50)
+//   for (let day = 0; day <= data.length; day++){
+//     for (let time = 0; time < data[day].length; time++) {
+//       // text((table.getString(r, c)),c*80+20,r*70+100,200);
+//       if ((day >= 1)&&(time >= 1)) {
+//         p = data[day][time];
+//         //AsleepDuck.new(x,y);
+//         text((data[day][time]),20,20*time);
+//       }
+//       AsleepDuck.show(); 
+//     }
+//   }
+  
+}
