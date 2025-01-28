@@ -29,28 +29,15 @@ function setup() {
   // ImbetweenDuck = new Duck(random(width),random(height),random(100),0,0,0,'d');
   // want to calculate spacing fromcsv so width/rows for x, etc.
   spacingX = (width - 4*spacingN) / rowN; 
-  spacingY = (height - 4*spacingN) / colN; 
+  spacingY = (height - 4*spacingN) / colN;
   
-
-  // // #############################################################################################  cycle through the table and display
-  for (let r = 0; r < table.getRowCount(); r++) {
-    for (let c = 0; c < table.getColumnCount(); c++) {
-      // text((table.getString(r, c)),c*80+20,r*70+100,200);
-      if ((r == 0)&&(c > 0)) { // column header i.e. time of day
-        text((table.getString(r, c)),r*70+spacingN,(height-spacingN-11)-c*spacingY,spacingN);
-        // duck1 = new Duck(r*70+spacingN,(height-spacingN-11)-c*spacingY,50);
-      } else if ((r >= 1)&&(c == 0)){ // row header i.e. day of the week 
-        // duck1 = new Duck(r*70+spacingN,(height-spacingN)-c*spacingY,50);
-        text((table.getString(r, c)),r*spacingX,(height-spacingN)-c*spacingY,spacingN);
-      }
-      // else{ ... rest of the data aside from headers}
-    }
+  if (click == 0) {
+    textSize(22);  //  https://p5js.org/reference/p5/text/#:~:text=Call%20textSize()%20and%20textFont,fonts%20loaded%20with%20loadFont().
+    textStyle(BOLD); // https://p5js.org/reference/p5/textStyle/
+    text(str('click to reveal data'),width*0.4,height * 0.515);
+    textSize(10)
   }
-  describe(`chart of percentage of sleep had per hour per day for a week in November"`);
-  // // #############################################################################################  end table display by cycling
-
   // take table info and store in array
-
   // #############################################################################################  record table data to 'data' array
   data = [[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Friday
           [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],  // Saturday
@@ -68,18 +55,6 @@ function setup() {
       }
     }
   }
-  // // // display stored info as is stored in data array
-  // text('Friday ' + data[0], 50,130);
-  // text('Saturday ' + data[1], 50,150);
-  // text('Sunday ' + data[2], 50,170);
-  // text('Monday ' + data[3], 50,190);
-  // text('Tuesday ' + data[4], 50,210);
-  // text('Wednesday ' + data[5], 50,230);
-  // text('Thursday ' + data[6], 50,250);
-  // text(str('Percentage of Sleep Had Hourly per Day'),120,4*spacingN);
-  // describe(`chart of percentage of sleep had per hour per day for a week in November"`);
-  // #############################################################################################  now we have our data stored to use elsewhere
-
 }
 
 class Duck {
@@ -141,36 +116,7 @@ class Duck {
   }
 }
 
-// mouse pressed to reveal data?
-function mouseClicked(){
-  if (click == 0) {
-    textSize(22);  //  https://p5js.org/reference/p5/text/#:~:text=Call%20textSize()%20and%20textFont,fonts%20loaded%20with%20loadFont().
-    textStyle(BOLD); // https://p5js.org/reference/p5/textStyle/
-    text(str('click to reveal data'),width*0.4,height * 0.515);
-    textSize(10)
-  } if (click == 1) {
-    fill(200,200,200)
-    rect(width*0.4,height * 0.5,200,20)
-  }
-   day = click;
-    for (let time = 0; time < data[day].length; time++) {
-      p = data[day][time];
-      if (p == 0){
-        AwakeDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
-      } else if (p == 1){
-        AsleepDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
-      } else {
-        ImbetweenDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
-      }
-    }
-  click+=1; 
-
-}
-
-
-
 function draw(){  
-  
   // background(200,200,200);
   //  create key to understand the graph
   keyX = width/2 + 3.6*spacingN;
@@ -194,19 +140,31 @@ function draw(){
   text(str('Percentage of Sleep Had Hourly per Day'),spacingN*0.8,3*spacingN);
   
   textSize(10)
-
+  for (let r = 0; r < table.getRowCount(); r++) {
+    for (let c = 0; c < table.getColumnCount(); c++) {
+      // text((table.getString(r, c)),c*80+20,r*70+100,200);
+      if ((r == 0)&&(c > 0)) { // column header i.e. time of day
+        text((table.getString(r, c)),r*70+spacingN,(height-spacingN-11)-c*spacingY,spacingN);
+        // duck1 = new Duck(r*70+spacingN,(height-spacingN-11)-c*spacingY,50);
+      } else if ((r >= 1)&&(c == 0)){ // row header i.e. day of the week 
+        // duck1 = new Duck(r*70+spacingN,(height-spacingN)-c*spacingY,50);
+        text((table.getString(r, c)),r*spacingX,(height-spacingN)-c*spacingY,spacingN);
+      }
+      // else{ ... rest of the data aside from headers}
+    }
+  }
+  describe(`chart of percentage of sleep had per hour per day for a week in November"`);
   tic += 1; //tic starts at 0;
-  text(str('Monday'), keyX,keyY-30)
-  // for (let day = 0; day <= data.length; day++){
-  //   for (let time = 0; time < data[day].length; time++) {
-  //     p = data[day][time];
-  //     if (p == 0){
-  //       AwakeDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
-  //     } else if (p == 1){
-  //       AsleepDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
-  //     } else {
-  //       ImbetweenDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
-  //     }
-  //   }
-  // }  
+  for (let day = 0; day <= data.length; day++){
+    for (let time = 0; time < data[day].length; time++) {
+      p = data[day][time];
+      if (p == 0){
+        AwakeDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
+      } else if (p == 1){
+        AsleepDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
+      } else {
+        ImbetweenDuck.new(7*spacingN+spacingX*day-30,spacingN+spacingY*time+80,p);
+      }
+    }
+  }  
 }
