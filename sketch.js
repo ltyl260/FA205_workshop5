@@ -11,25 +11,25 @@ function preload() {
 function setup() {
   createCanvas(800,1100);
   background(200,200,200);
-  tic = -1; // initialise 'tic' to track the iterations of the sketch
-  click = 0; //initialise 'click' to track the mouse clicks
+  let tic = -1; // initialise 'tic' to track the iterations of the sketch
+  let click = 0; //initialise 'click' to track the mouse clicks
   //count the columns
-  rowN = table.getRowCount();
-  colN = table.getColumnCount();
-  spacingN = 20
+  let rowN = table.getRowCount();
+  let colN = table.getColumnCount();
+  let spacingN = 20
   // let duck1 = new Duck(20,20,50);
-  AsleepDuck = new Duck(100,100,20);
+  let AsleepDuck = new Duck(100,100,20);
   AsleepDuck.colour(0,0,0);
-  ImbetweenDuck = new Duck(100,100,20);
+  let ImbetweenDuck = new Duck(100,100,20);
   ImbetweenDuck.colour(155,155,155);
-  AwakeDuck = new Duck(155,155,20);
-  ducKey = new Duck(20,20,15);
+  let AwakeDuck = new Duck(155,155,20);
+  let ducKey = new Duck(20,20,15);
   ducKey.colour(255,0,0)
   // AwakeDuck = new Duck(random(width),random(height),random(100),232, 235, 52,'awake');
   // ImbetweenDuck = new Duck(random(width),random(height),random(100),0,0,0,'d');
   // want to calculate spacing fromcsv so width/rows for x, etc.
-  spacingX = (width - 4*spacingN) / rowN; 
-  spacingY = (height - 4*spacingN) / colN;
+  let spacingX = (width - 4*spacingN) / rowN; 
+  let spacingY = (height - 4*spacingN) / colN;
   
   if (click == 0) {
     textSize(22);  //  https://p5js.org/reference/p5/text/#:~:text=Call%20textSize()%20and%20textFont,fonts%20loaded%20with%20loadFont().
